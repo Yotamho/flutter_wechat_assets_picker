@@ -1524,7 +1524,9 @@ class DefaultAssetPickerBuilderDelegate
                 selectAsset(context, asset, index, isSelected);
               },
               onTapHint: semanticsTextDelegate.sActionSelectHint,
-              onLongPress: isPreviewEnabled
+              onLongPress: isNoSelection ? () {
+                selectAsset(context, asset, index, isSelected);
+                } : isPreviewEnabled
                   ? () {
                       viewAsset(context, index, asset);
                     }
@@ -2244,6 +2246,8 @@ class DefaultAssetPickerBuilderDelegate
   Widget selectedBackdrop(BuildContext context, int index, AssetEntity asset) {
     final double indicatorSize =
         MediaQuery.sizeOf(context).width / gridCount / 3;
+                    final p = Provider.of<DefaultAssetPickerProvider>(context);
+          final selected = p.selectedDescriptions.contains(asset.toString());
     return Positioned.fill(
       child: GestureDetector(
         onTap: isPreviewEnabled
@@ -2251,6 +2255,9 @@ class DefaultAssetPickerBuilderDelegate
                 viewAsset(context, index, asset);
               }
             : null,
+        onLongPress: () {
+                 selectAsset(context, asset, index, selected);
+                },
         child: Consumer<DefaultAssetPickerProvider>(
           builder: (_, DefaultAssetPickerProvider p, __) {
             final int index = p.selectedAssets.indexOf(asset);
