@@ -254,6 +254,17 @@ abstract class AssetPickerProvider<Asset, Path> extends ChangeNotifier {
     set.remove(item);
     selectedAssets = set;
   }
+
+  Asset? get focusedAsset => _focusedAsset;
+  Asset? _focusedAsset;
+
+  set focusedAsset(Asset? value) {
+    if (value == _focusedAsset) {
+      return;
+    }
+    _focusedAsset = value;
+    notifyListeners();
+  }
 }
 
 /// The default implementation of the [AssetPickerProvider] for the picker.

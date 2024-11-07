@@ -10,11 +10,14 @@ import 'package:wechat_assets_picker_demo/l10n/gen/app_localizations.dart';
 import 'constants/extensions.dart';
 import 'pages/splash_page.dart';
 
+import 'package:flutter/rendering.dart';
+
 const Color themeColor = Color(0xff00bc56);
 
 String? packageVersion;
 
 void main() {
+  debugRepaintRainbowEnabled = true;
   runApp(const MyApp());
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle.dark.copyWith(statusBarColor: Colors.transparent),

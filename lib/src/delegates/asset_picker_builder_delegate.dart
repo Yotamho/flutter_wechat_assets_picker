@@ -1145,19 +1145,19 @@ class DefaultAssetPickerBuilderDelegate
   @override
   Widget appleOSLayout(BuildContext context) {
     Widget gridLayout(BuildContext context) {
-      return ValueListenableBuilder<bool>(
-        valueListenable: isSwitchingPath,
-        builder: (_, bool isSwitchingPath, __) => Semantics(
-          excludeSemantics: isSwitchingPath,
-          child: RepaintBoundary(
-            child: Stack(
-              children: <Widget>[
-                Positioned.fill(child: assetsGridBuilder(context)),
-                Positioned.fill(top: null, child: bottomActionBar(context)),
-              ],
+          return ValueListenableBuilder<bool>(
+          valueListenable: isSwitchingPath,
+          builder: (_, bool isSwitchingPath, __) => Semantics(
+            excludeSemantics: isSwitchingPath,
+            child: RepaintBoundary(
+              child: Stack(
+                children: <Widget>[
+                  Positioned.fill(child: assetsGridBuilder(context)),
+                  Positioned.fill(top: null, child: bottomActionBar(context)),
+                ],
+              ),
             ),
           ),
-        ),
       );
     }
 
@@ -1448,14 +1448,14 @@ class DefaultAssetPickerBuilderDelegate
       AssetType.other => const SizedBox.shrink(),
     };
     final Widget content = Stack(
-      key: ValueKey<String>(asset.id),
-      children: <Widget>[
-        builder,
-        selectedBackdrop(context, currentIndex, asset),
-        if (!isWeChatMoment || asset.type != AssetType.video)
-          selectIndicator(context, index, asset),
-        itemBannedIndicator(context, asset),
-      ],
+          key: ValueKey<String>(asset.id),
+          children: <Widget>[
+            builder,
+            selectedBackdrop(context, currentIndex, asset),
+            if (!isWeChatMoment || asset.type != AssetType.video)
+              selectIndicator(context, index, asset),
+            itemBannedIndicator(context, asset),
+          ],
     );
     return assetGridItemSemanticsBuilder(context, index, asset, content);
   }
@@ -2161,7 +2161,7 @@ class DefaultAssetPickerBuilderDelegate
             (!p.selectedAssets.contains(asset) && p.selectedMaximumAssets) ||
                 (isWeChatMoment &&
                     asset.type == AssetType.video &&
-                    p.selectedAssets.isNotEmpty);
+                    p.selectedAssets.isNotEmpty) || (p.focusedAsset != null && asset != p.focusedAsset);
         if (isDisabled) {
           return Container(
             color: theme.colorScheme.background.withOpacity(.85),
@@ -2236,9 +2236,11 @@ class DefaultAssetPickerBuilderDelegate
   Widget selectedBackdrop(BuildContext context, int index, AssetEntity asset) {
     final double indicatorSize =
         MediaQuery.sizeOf(context).width / gridCount / 3;
+    final p = Provider.of<DefaultAssetPickerProvider>(context);
     return Positioned.fill(
       child: GestureDetector(
-        onTap: isPreviewEnabled
+        onLongPress: () => p.focusedAsset = asset,
+        onTap: p.focusedAsset != null ? () => p.focusedAsset = null : isPreviewEnabled
             ? () {
                 viewAsset(context, index, asset);
               }
