@@ -103,6 +103,7 @@ class _MultiAssetsPageState extends State<MultiAssetsPage>
           );
         },
       ),
+      PickMethod.withContextMenu(context, maxAssetsCount),
     ];
   }
 
