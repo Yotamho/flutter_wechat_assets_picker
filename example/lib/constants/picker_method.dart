@@ -2,6 +2,7 @@
 // Use of this source code is governed by an Apache license that can be found
 // in the LICENSE file.
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
@@ -433,6 +434,32 @@ class PickMethod {
             selectedAssets: assets,
             pathNameBuilder: (AssetPathEntity path) => '${path.name}🍭',
           ),
+        );
+      },
+    );
+  }
+
+  factory PickMethod.withContextMenu(BuildContext context, int maxAssetsCount) {
+    return PickMethod(
+      icon: '📖',
+      name: context.l10n.pickMethodContextMenuName,
+      description: context.l10n.pickMethodContextMenuDescription,
+      method: (BuildContext context, List<AssetEntity> assets) {
+        return AssetPicker.pickAssets(
+          context,
+          pickerConfig: AssetPickerConfig(
+              maxAssets: maxAssetsCount,
+              selectedAssets: assets,
+              contextActions: [
+                (context, asset) => CupertinoContextMenuAction(
+                      child: Text('Show Asset ID'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(SnackBar(content: Text(asset.id)));
+                      },
+                    )
+              ]),
         );
       },
     );
