@@ -761,6 +761,7 @@ class DefaultAssetPickerBuilderDelegate
     super.assetsChangeCallback,
     super.assetsChangeRefreshPredicate,
     super.contextActions,
+    super.customIndicator,
     super.themeColor,
     super.textDelegate,
     super.locale,
