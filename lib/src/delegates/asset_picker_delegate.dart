@@ -116,6 +116,7 @@ class AssetPickerDelegate {
         assetsChangeCallback: pickerConfig.assetsChangeCallback,
         assetsChangeRefreshPredicate: pickerConfig.assetsChangeRefreshPredicate,
         contextActions: pickerConfig.contextActions,
+        customIndicator: pickerConfig.customIndicator,
         textDelegate: pickerConfig.textDelegate,
         themeColor: pickerConfig.themeColor,
         locale: Localizations.maybeLocaleOf(context),
