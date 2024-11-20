@@ -190,4 +190,11 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String get pickMethodContextMenuDescription =>
       'Picker is provided with custom actions that are shown when asset on grid is long pressed';
+
+  @override
+  String get customGalleryName => 'Gallery';
+
+  @override
+  String get customGalleryDescription =>
+      'Not behaving as a picker, but as a gallery widget the shows device assets and allows actions';
 }

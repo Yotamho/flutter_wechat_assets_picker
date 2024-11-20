@@ -1,6 +1,8 @@
 {
   "zh": [
     "pickMethodContextMenuName",
-    "pickMethodContextMenuDescription"
+    "pickMethodContextMenuDescription",
+    "customGalleryName",
+    "customGalleryDescription"
   ]
 }

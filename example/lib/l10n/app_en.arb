@@ -56,6 +56,7 @@
   "customPickerInstagramLayoutName": "Instagram layout picker",
   "customPickerInstagramLayoutDescription": "The picker reproduces Instagram layout with preview and scroll animations. It's also published as the package insta_assets_picker.",
   "pickMethodContextMenuName": "Context Actions picker",
-  "pickMethodContextMenuDescription": "Picker is provided with custom actions that are shown when asset on grid is long pressed"
-
+  "pickMethodContextMenuDescription": "Picker is provided with custom actions that are shown when asset on grid is long pressed",
+  "customGalleryName": "Gallery",
+  "customGalleryDescription": "Not behaving as a picker, but as a gallery widget the shows device assets and allows actions"
 }

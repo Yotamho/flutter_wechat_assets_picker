@@ -439,6 +439,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Picker is provided with custom actions that are shown when asset on grid is long pressed'**
   String get pickMethodContextMenuDescription;
+
+  /// No description provided for @customGalleryName.
+  ///
+  /// In en, this message translates to:
+  /// **'Gallery'**
+  String get customGalleryName;
+
+  /// No description provided for @customGalleryDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Not behaving as a picker, but as a gallery widget the shows device assets and allows actions'**
+  String get customGalleryDescription;
 }
 
 class _AppLocalizationsDelegate
