@@ -50,7 +50,6 @@ abstract class AssetPickerBuilderDelegate<Asset, Path> {
     this.assetsChangeCallback,
     this.assetsChangeRefreshPredicate,
     this.contextActions,
-    this.customIndicator,
     Color? themeColor,
     AssetPickerTextDelegate? textDelegate,
     Locale? locale,
@@ -135,8 +134,6 @@ abstract class AssetPickerBuilderDelegate<Asset, Path> {
       assetsChangeRefreshPredicate;
 
   final List<Widget Function(BuildContext, Asset)>? contextActions;
-
-  final Widget Function(BuildContext, int, Asset)? customIndicator;
 
   /// [ThemeData] for the picker.
   /// 选择器使用的主题
@@ -1462,7 +1459,7 @@ class DefaultAssetPickerBuilderDelegate
         builder,
         selectedBackdrop(context, currentIndex, asset),
         if (!isWeChatMoment || asset.type != AssetType.video)
-          (customIndicator ?? selectIndicator)(context, index, asset),
+          selectIndicator(context, index, asset),
         itemBannedIndicator(context, asset),
       ],
     );
