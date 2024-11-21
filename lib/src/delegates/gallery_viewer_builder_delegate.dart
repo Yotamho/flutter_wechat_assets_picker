@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:wechat_picker_library/wechat_picker_library.dart';
@@ -15,23 +14,29 @@ import 'package:photo_manager_image_provider/photo_manager_image_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:wechat_picker_library/wechat_picker_library.dart';
 
-
-class GalleryViewerBuilderDelegate extends DefaultAssetPickerViewerBuilderDelegate {
-  GalleryViewerBuilderDelegate({required super.currentIndex, required super.previewAssets, required super.themeData, this.bottomDetailWidgetBuilder});
+class GalleryViewerBuilderDelegate
+    extends DefaultAssetPickerViewerBuilderDelegate {
+  GalleryViewerBuilderDelegate(
+      {required super.currentIndex,
+      required super.previewAssets,
+      required super.themeData,
+      this.bottomDetailWidgetBuilder});
 
   @override
-  final bottomPreviewHeight = 0.0; // no selection hence no selected preview thumbnails
+  final bottomPreviewHeight =
+      0.0; // no selection hence no selected preview thumbnails
 
   // widget builder to show in the bottom detail bar.
   // builder arguments are context, currentIndex and assetEntity
-  final Widget Function(BuildContext, int, AssetEntity)? bottomDetailWidgetBuilder;
-  
+  final Widget Function(BuildContext, int, AssetEntity)?
+      bottomDetailWidgetBuilder;
+
   @override
   Widget selectButton(BuildContext context) {
     return const SizedBox.shrink();
   }
 
-    /// AppBar widget.
+  /// AppBar widget.
   /// 顶栏部件
   Widget appBar(BuildContext context) {
     final bar = AssetPickerAppBar(
@@ -65,8 +70,9 @@ class GalleryViewerBuilderDelegate extends DefaultAssetPickerViewerBuilderDelega
 
   @override
   Widget bottomDetailBuilder(BuildContext context) {
-    assert(bottomDetailWidgetBuilder != null, "method shouldn't be called if there is no widget to show");
-        final backgroundColor = themeData.bottomAppBarTheme.color?.withOpacity(
+    assert(bottomDetailWidgetBuilder != null,
+        "method shouldn't be called if there is no widget to show");
+    final backgroundColor = themeData.bottomAppBarTheme.color?.withOpacity(
       themeData.bottomAppBarTheme.color!.opacity *
           (isAppleOS(context) ? .9 : 1),
     );
@@ -82,26 +88,26 @@ class GalleryViewerBuilderDelegate extends DefaultAssetPickerViewerBuilderDelega
         child: child!,
       ),
       child: CNP<AssetPickerViewerProvider<AssetEntity>?>.value(
-        value: provider,
-        child:             Container(
-              height: bottomBarHeight + context.bottomPadding,
-              padding: const EdgeInsets.symmetric(horizontal: 20.0)
-                  .copyWith(bottom: context.bottomPadding),
-              decoration: BoxDecoration(
-                border: Border(top: BorderSide(color: themeData.canvasColor)),
-                color: backgroundColor,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                    bottomDetailWidgetBuilder!(context, currentIndex, currentAsset)
-                ],
-              ),
-            )     ),
+          value: provider,
+          child: Container(
+            height: bottomBarHeight + context.bottomPadding,
+            padding: const EdgeInsets.symmetric(horizontal: 20.0)
+                .copyWith(bottom: context.bottomPadding),
+            decoration: BoxDecoration(
+              border: Border(top: BorderSide(color: themeData.canvasColor)),
+              color: backgroundColor,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                bottomDetailWidgetBuilder!(context, currentIndex, currentAsset)
+              ],
+            ),
+          )),
     );
   }
 
-    Widget _pageViewBuilder(BuildContext context) {
+  Widget _pageViewBuilder(BuildContext context) {
     return Semantics(
       sortKey: ordinalSortKey(1),
       child: ExtendedImageGesturePageView.builder(
@@ -121,7 +127,7 @@ class GalleryViewerBuilderDelegate extends DefaultAssetPickerViewerBuilderDelega
 
   @override
   Widget build(BuildContext context) {
-       return Theme(
+    return Theme(
       data: themeData,
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: themeData.appBarTheme.systemOverlayStyle ??
@@ -142,7 +148,7 @@ class GalleryViewerBuilderDelegate extends DefaultAssetPickerViewerBuilderDelega
                 ),
               ] else ...<Widget>[
                 appBar(context),
-                if (bottomDetailWidgetBuilder != null) 
+                if (bottomDetailWidgetBuilder != null)
                   bottomDetailBuilder(context),
               ],
             ],
