@@ -39,7 +39,6 @@ class AssetPickerConfig {
     this.assetsChangeCallback,
     this.assetsChangeRefreshPredicate,
     this.contextActions,
-    this.customIndicator,
     this.shouldAutoplayPreview = false,
   })  : assert(
           pickerTheme == null || themeColor == null,
@@ -206,8 +205,6 @@ class AssetPickerConfig {
 
   /// {@macro wechat_assets_picker.contextActions}
   final List<Widget Function(BuildContext, AssetEntity)>? contextActions;
-
-  final Widget Function(BuildContext, int, AssetEntity)? customIndicator;
 
   /// Whether the preview should auto play.
   /// 预览是否自动播放
