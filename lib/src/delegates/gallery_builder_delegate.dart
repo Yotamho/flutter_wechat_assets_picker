@@ -26,7 +26,7 @@ class GalleryBuilderDelegate extends DefaultAssetPickerBuilderDelegate {
       context,
       delegate: GalleryViewerBuilderDelegate(
           currentIndex: index,
-          previewAssets: [currentAsset],
+          previewAssets: provider.currentAssets,
           themeData: theme,
           bottomDetailWidgetBuilder: viewerBottomDetailWidgetBuilder),
     );
