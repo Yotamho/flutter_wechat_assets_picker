@@ -26,6 +26,9 @@ class GalleryViewerBuilderDelegate
   final bottomPreviewHeight =
       0.0; // no selection hence no selected preview thumbnails
 
+  @override
+  final bottomBarHeight = 100.0;
+
   // widget builder to show in the bottom detail bar.
   // builder arguments are context, currentIndex and assetEntity
   final Widget Function(BuildContext, int, AssetEntity)?
@@ -38,6 +41,7 @@ class GalleryViewerBuilderDelegate
 
   /// AppBar widget.
   /// 顶栏部件
+  @override
   Widget appBar(BuildContext context) {
     final bar = AssetPickerAppBar(
       leading: Semantics(
