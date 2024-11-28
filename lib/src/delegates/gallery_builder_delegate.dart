@@ -7,6 +7,7 @@ class GalleryBuilderDelegate extends DefaultAssetPickerBuilderDelegate {
       {required super.provider,
       required super.initialPermission,
       super.locale,
+      super.pickerTheme,
       super.contextActions,
       this.customGridItemWidgetBuilder,
       this.viewerBottomDetailWidgetBuilder});
