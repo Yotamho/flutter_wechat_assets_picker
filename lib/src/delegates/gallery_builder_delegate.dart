@@ -13,6 +13,7 @@ class GalleryBuilderDelegate extends DefaultAssetPickerBuilderDelegate {
       super.locale,
       super.pickerTheme,
       super.contextActions,
+      super.keepScrollOffset,
       this.customGridItemWidgetBuilder,
       this.viewerBottomDetailWidgetBuilder});
 
