@@ -15,12 +15,15 @@ class GalleryBuilderDelegate extends DefaultAssetPickerBuilderDelegate {
       super.contextActions,
       super.keepScrollOffset,
       this.customGridItemWidgetBuilder,
-      this.viewerBottomDetailWidgetBuilder});
+      this.viewerBottomDetailWidgetBuilder,
+      this.hidePathEntitySelector = false,});
 
   final Widget Function(BuildContext, int, AssetEntity)?
       customGridItemWidgetBuilder;
   final Widget Function(BuildContext, int, AssetEntity)?
       viewerBottomDetailWidgetBuilder;
+
+  final bool hidePathEntitySelector;
 
   @override
   Future<void> viewAsset(
@@ -52,6 +55,9 @@ class GalleryBuilderDelegate extends DefaultAssetPickerBuilderDelegate {
 
   @override
   Widget pathEntitySelector(BuildContext context) {
+    if (hidePathEntitySelector) {
+      return const SizedBox.shrink();
+    }
     Widget pathText(
       BuildContext context,
       String text,
@@ -146,6 +152,23 @@ class GalleryBuilderDelegate extends DefaultAssetPickerBuilderDelegate {
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  @override
+    Widget backButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: IconButton(
+        onPressed: () {
+          Navigator.maybeOf(context)?.maybePop();
+        },
+        tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
+        icon: Icon(
+          Icons.arrow_back,
+          semanticLabel: MaterialLocalizations.of(context).closeButtonTooltip,
         ),
       ),
     );
