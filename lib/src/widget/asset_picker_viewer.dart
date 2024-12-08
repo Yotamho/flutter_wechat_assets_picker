@@ -91,6 +91,7 @@ class AssetPickerViewer<Asset, Path> extends StatefulWidget {
     required AssetPickerViewerBuilderDelegate<A, P> delegate,
     PermissionRequestOption permissionRequestOption =
         const PermissionRequestOption(),
+    bool useRootNavigator = false,
   }) async {
     await AssetPicker.permissionCheck(requestOption: permissionRequestOption);
     final Widget viewer = AssetPickerViewer<A, P>(builder: delegate);
@@ -101,7 +102,8 @@ class AssetPickerViewer<Asset, Path> extends StatefulWidget {
       },
     );
     final List<A>? result =
-        await Navigator.maybeOf(context)?.push<List<A>>(pageRoute);
+        await Navigator.maybeOf(context, rootNavigator: useRootNavigator)
+            ?.push<List<A>>(pageRoute);
     return result;
   }
 }

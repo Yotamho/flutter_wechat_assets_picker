@@ -7,16 +7,18 @@ import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:wechat_picker_library/wechat_picker_library.dart';
 
 class GalleryBuilderDelegate extends DefaultAssetPickerBuilderDelegate {
-  GalleryBuilderDelegate(
-      {required super.provider,
-      required super.initialPermission,
-      super.locale,
-      super.pickerTheme,
-      super.contextActions,
-      super.keepScrollOffset,
-      this.customGridItemWidgetBuilder,
-      this.viewerBottomDetailWidgetBuilder,
-      this.hidePathEntitySelector = false,});
+  GalleryBuilderDelegate({
+    required super.provider,
+    required super.initialPermission,
+    super.locale,
+    super.pickerTheme,
+    super.contextActions,
+    super.keepScrollOffset,
+    this.customGridItemWidgetBuilder,
+    this.viewerBottomDetailWidgetBuilder,
+    this.hidePathEntitySelector = false,
+    this.viewAssetWithRootNavigator = false,
+  });
 
   final Widget Function(BuildContext, int, AssetEntity)?
       customGridItemWidgetBuilder;
@@ -24,6 +26,7 @@ class GalleryBuilderDelegate extends DefaultAssetPickerBuilderDelegate {
       viewerBottomDetailWidgetBuilder;
 
   final bool hidePathEntitySelector;
+  final bool viewAssetWithRootNavigator;
 
   @override
   Future<void> viewAsset(
@@ -34,10 +37,12 @@ class GalleryBuilderDelegate extends DefaultAssetPickerBuilderDelegate {
     await AssetPickerViewer.pushToViewerWithDelegate(
       context,
       delegate: GalleryViewerBuilderDelegate(
-          currentIndex: index,
-          previewAssets: provider.currentAssets,
-          themeData: theme,
-          bottomDetailWidgetBuilder: viewerBottomDetailWidgetBuilder),
+        currentIndex: index,
+        previewAssets: provider.currentAssets,
+        themeData: theme,
+        bottomDetailWidgetBuilder: viewerBottomDetailWidgetBuilder,
+      ),
+      useRootNavigator: viewAssetWithRootNavigator,
     );
   }
 
@@ -158,7 +163,7 @@ class GalleryBuilderDelegate extends DefaultAssetPickerBuilderDelegate {
   }
 
   @override
-    Widget backButton(BuildContext context) {
+  Widget backButton(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: IconButton(

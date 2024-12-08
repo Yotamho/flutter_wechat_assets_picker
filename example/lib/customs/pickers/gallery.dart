@@ -21,11 +21,12 @@ class Gallery extends StatelessWidget {
       future: ps,
       builder: (context, snapshot) => snapshot.hasData
           ? GalleryBuilderDelegate(
-                  provider: provider,
-                  initialPermission: snapshot.data!,
-                  locale: Localizations.maybeLocaleOf(context),
-                  viewerBottomDetailWidgetBuilder: (p0, p1, p2) => const Text('Custom Widget'),)
-              .build(context)
+              provider: provider,
+              initialPermission: snapshot.data!,
+              locale: Localizations.maybeLocaleOf(context),
+              viewerBottomDetailWidgetBuilder: (p0, p1, p2) =>
+                  const Text('Custom Widget'),
+            ).build(context)
           : const CircularProgressIndicator(),
     );
   }
