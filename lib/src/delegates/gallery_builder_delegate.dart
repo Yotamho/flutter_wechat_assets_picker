@@ -188,4 +188,13 @@ class GalleryBuilderDelegate extends DefaultAssetPickerBuilderDelegate {
       ),
     );
   }
+
+  @override
+  Widget build(BuildContext context) {
+    if (disablePathSwitching && provider.currentPath == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.of(context).pop());
+      return Container();
+    }
+    return super.build(context);
+  }
 }
