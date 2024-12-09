@@ -16,7 +16,7 @@ class GalleryBuilderDelegate extends DefaultAssetPickerBuilderDelegate {
     super.keepScrollOffset,
     this.customGridItemWidgetBuilder,
     this.viewerBottomDetailWidgetBuilder,
-    this.hidePathEntitySelector = false,
+    this.disablePathSwitching = false,
     this.viewAssetWithRootNavigator = false,
   });
 
@@ -25,7 +25,7 @@ class GalleryBuilderDelegate extends DefaultAssetPickerBuilderDelegate {
   final Widget Function(BuildContext, int, AssetEntity)?
       viewerBottomDetailWidgetBuilder;
 
-  final bool hidePathEntitySelector;
+  final bool disablePathSwitching;
   final bool viewAssetWithRootNavigator;
 
   @override
@@ -60,9 +60,6 @@ class GalleryBuilderDelegate extends DefaultAssetPickerBuilderDelegate {
 
   @override
   Widget pathEntitySelector(BuildContext context) {
-    if (hidePathEntitySelector) {
-      return const SizedBox.shrink();
-    }
     Widget pathText(
       BuildContext context,
       String text,
@@ -83,6 +80,19 @@ class GalleryBuilderDelegate extends DefaultAssetPickerBuilderDelegate {
       );
     }
 
+    if (disablePathSwitching) {
+      return Selector<DefaultAssetPickerProvider,
+          PathWrapper<AssetPathEntity>?>(
+        selector: (_, DefaultAssetPickerProvider p) => p.currentPath,
+        builder: (_, p, ___) {
+          if (p == null) {
+            throw StateError(
+                'if path switching is disabled, asset picker must be called when path is not null');
+          }
+          return pathText(context, p.path.name, p.path.name);
+        },
+      );
+    }
     return UnconstrainedBox(
       child: GestureDetector(
         onTap: () {
