@@ -89,7 +89,7 @@ class GalleryBuilderDelegate extends DefaultAssetPickerBuilderDelegate {
             throw StateError(
                 'if path switching is disabled, asset picker must be called when path is not null');
           }
-          return pathText(context, p.path.name, p.path.name);
+          return Text(p.path.name, style: Theme.of(context).textTheme.headlineMedium);
         },
       );
     }
@@ -182,9 +182,9 @@ class GalleryBuilderDelegate extends DefaultAssetPickerBuilderDelegate {
         },
         tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
         icon: Icon(
-          Icons.arrow_back,
-          semanticLabel: MaterialLocalizations.of(context).closeButtonTooltip,
-        ),
+            Icons.arrow_back_ios_new,
+            semanticLabel: MaterialLocalizations.of(context).backButtonTooltip,
+          ),
       ),
     );
   }
