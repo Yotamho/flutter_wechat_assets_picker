@@ -86,10 +86,12 @@ class GalleryBuilderDelegate extends DefaultAssetPickerBuilderDelegate {
         selector: (_, DefaultAssetPickerProvider p) => p.currentPath,
         builder: (_, p, ___) {
           if (p == null) {
-            throw StateError(
-                'if path switching is disabled, asset picker must be called when path is not null');
+            // this means that the builder is being built and a postFrameCallback will
+            //   pop it before rendered, so a Container should be enough here.
+            return Container();
           }
-          return Text(p.path.name, style: Theme.of(context).textTheme.headlineMedium);
+          return Text(p.path.name,
+              style: Theme.of(context).textTheme.headlineMedium);
         },
       );
     }
@@ -182,19 +184,22 @@ class GalleryBuilderDelegate extends DefaultAssetPickerBuilderDelegate {
         },
         tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
         icon: Icon(
-            Icons.arrow_back_ios_new,
-            semanticLabel: MaterialLocalizations.of(context).backButtonTooltip,
-          ),
+          Icons.arrow_back_ios_new,
+          semanticLabel: MaterialLocalizations.of(context).backButtonTooltip,
+        ),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    // pop the gallery if path switching is disabled and there is no path already defined
     if (disablePathSwitching && provider.currentPath == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.of(context).pop());
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => Navigator.of(context).pop());
       return Container();
     }
+
     return super.build(context);
   }
 }
