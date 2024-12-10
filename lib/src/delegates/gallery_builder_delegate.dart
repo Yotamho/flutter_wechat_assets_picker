@@ -192,14 +192,19 @@ class GalleryBuilderDelegate extends DefaultAssetPickerBuilderDelegate {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget assetsGridBuilder(BuildContext context) {
     // pop the gallery if path switching is disabled and there is no path already defined
-    if (disablePathSwitching && provider.currentPath == null) {
-      WidgetsBinding.instance
-          .addPostFrameCallback((_) => Navigator.of(context).pop());
-      return Container();
-    }
+    // it is defined here because it is the most common ancestor that already has asset picker provider.
+    return Selector<DefaultAssetPickerProvider, PathWrapper<AssetPathEntity>?>(
+        selector: (_, p) => p.currentPath,
+        builder: (subcontext, path, ___) {
+          if (disablePathSwitching && provider.currentPath == null) {
+            WidgetsBinding.instance
+                .addPostFrameCallback((_) => Navigator.of(context).pop());
+            return Container();
+          }
 
-    return super.build(context);
+          return super.assetsGridBuilder(context);
+        });
   }
 }
