@@ -28,6 +28,8 @@ class GalleryBuilderDelegate extends DefaultAssetPickerBuilderDelegate {
   final bool disablePathSwitching;
   final bool viewAssetWithRootNavigator;
 
+  AssetPickerPageRoute<List<AssetEntity>>? removeRouteWhenPathIsNull;
+
   @override
   Future<void> viewAsset(
       BuildContext context, int? index, AssetEntity currentAsset) async {
@@ -198,9 +200,9 @@ class GalleryBuilderDelegate extends DefaultAssetPickerBuilderDelegate {
     return Selector<DefaultAssetPickerProvider, PathWrapper<AssetPathEntity>?>(
         selector: (_, p) => p.currentPath,
         builder: (subcontext, path, ___) {
-          if (disablePathSwitching && provider.currentPath == null) {
+          if (disablePathSwitching && provider.currentPath == null && removeRouteWhenPathIsNull != null) {
             WidgetsBinding.instance
-                .addPostFrameCallback((_) => Navigator.of(context).pop());
+                .addPostFrameCallback((_) => Navigator.of(context).removeRoute(removeRouteWhenPathIsNull!));
             return Container();
           }
 
