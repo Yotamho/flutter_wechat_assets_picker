@@ -26,8 +26,9 @@ class Gallery extends StatelessWidget {
               locale: Localizations.maybeLocaleOf(context),
               viewerBottomDetailWidgetBuilder: (p0, p1, p2) =>
                   const Text('Custom Widget'),
-              contextActions: [(context, asset) => Material(child: Text(asset.id))]
-            ).build(context)
+              contextActions: [
+                  (context, asset) => Material(child: Text(asset.id))
+                ]).build(context)
           : const CircularProgressIndicator(),
     );
   }

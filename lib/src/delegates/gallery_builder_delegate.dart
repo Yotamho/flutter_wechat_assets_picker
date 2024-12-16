@@ -200,9 +200,11 @@ class GalleryBuilderDelegate extends DefaultAssetPickerBuilderDelegate {
     return Selector<DefaultAssetPickerProvider, PathWrapper<AssetPathEntity>?>(
         selector: (_, p) => p.currentPath,
         builder: (subcontext, path, ___) {
-          if (disablePathSwitching && provider.currentPath == null && removeRouteWhenPathIsNull != null) {
-            WidgetsBinding.instance
-                .addPostFrameCallback((_) => Navigator.of(context).removeRoute(removeRouteWhenPathIsNull!));
+          if (disablePathSwitching &&
+              provider.currentPath == null &&
+              removeRouteWhenPathIsNull != null) {
+            WidgetsBinding.instance.addPostFrameCallback((_) =>
+                Navigator.of(context).removeRoute(removeRouteWhenPathIsNull!));
             return Container();
           }
 
