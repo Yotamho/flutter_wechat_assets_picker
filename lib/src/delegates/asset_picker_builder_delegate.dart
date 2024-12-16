@@ -1713,7 +1713,7 @@ class DefaultAssetPickerBuilderDelegate
                     child: ExtendedImage(
                       image: provider,
                     ))
-                : item;
+                : Material(child: item);
           });
     } else {
       return item;
