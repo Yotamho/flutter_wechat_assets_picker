@@ -104,7 +104,12 @@ class GalleryViewerBuilderDelegate
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                bottomDetailWidgetBuilder!(context, currentIndex, currentAsset)
+                CNP<ExtendedPageController>(
+                  create: (context) => pageController,
+                  child: Consumer<ExtendedPageController>(
+                      builder: (_, __, ___) => bottomDetailWidgetBuilder!(
+                          context, currentIndex, currentAsset)),
+                )
               ],
             ),
           )),
