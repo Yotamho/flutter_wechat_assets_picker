@@ -91,28 +91,27 @@ class GalleryViewerBuilderDelegate
         height: context.bottomPadding + bottomDetailHeight,
         child: child!,
       ),
-      child: CNP<AssetPickerViewerProvider<AssetEntity>?>.value(
-          value: provider,
-          child: Container(
-            height: bottomBarHeight + context.bottomPadding,
-            padding: const EdgeInsets.symmetric(horizontal: 20.0)
-                .copyWith(bottom: context.bottomPadding),
-            decoration: BoxDecoration(
-              border: Border(top: BorderSide(color: themeData.canvasColor)),
-              color: backgroundColor,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                CNP<ExtendedPageController>(
-                  create: (context) => pageController,
-                  child: Consumer<ExtendedPageController>(
-                      builder: (_, __, ___) => bottomDetailWidgetBuilder!(
-                          context, currentIndex, currentAsset)),
-                )
-              ],
-            ),
-          )),
+      child: Container(
+        height: bottomBarHeight + context.bottomPadding,
+        padding: const EdgeInsets.symmetric(horizontal: 20.0)
+            .copyWith(bottom: context.bottomPadding),
+        decoration: BoxDecoration(
+          border: Border(top: BorderSide(color: themeData.canvasColor)),
+          color: backgroundColor,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            StreamBuilder<int>(
+              stream: pageStreamController.stream,
+              builder: (context, snapshot) {
+                return bottomDetailWidgetBuilder!(
+                    context, currentIndex, currentAsset);
+              },
+            )
+          ],
+        ),
+      ),
     );
   }
 
