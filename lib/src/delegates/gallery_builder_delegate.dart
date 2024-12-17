@@ -14,6 +14,7 @@ class GalleryBuilderDelegate extends DefaultAssetPickerBuilderDelegate {
     super.pickerTheme,
     super.contextActions,
     super.keepScrollOffset,
+    super.shouldRevertGrid,
     this.customGridItemWidgetBuilder,
     this.viewerBottomDetailWidgetBuilder,
     this.disablePathSwitching = false,
