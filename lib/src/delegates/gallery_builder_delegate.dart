@@ -115,7 +115,9 @@ class GalleryBuilderDelegate extends DefaultAssetPickerBuilderDelegate {
           constraints: BoxConstraints(
             maxWidth: MediaQuery.sizeOf(context).width * 0.5,
           ),
-          padding: const EdgeInsetsDirectional.only(start: 12, end: 6),
+          padding: Navigator.maybeOf(context)?.canPop() ?? false
+              ? const EdgeInsetsDirectional.only(start: 12, end: 6)
+              : null,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(999),
             color: theme.focusColor,
