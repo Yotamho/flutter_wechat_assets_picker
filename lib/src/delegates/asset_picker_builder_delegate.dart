@@ -1963,9 +1963,7 @@ class DefaultAssetPickerBuilderDelegate
           constraints: BoxConstraints(
             maxWidth: MediaQuery.sizeOf(context).width * 0.5,
           ),
-          padding: Navigator.maybeOf(context)?.canPop() ?? false
-              ? const EdgeInsetsDirectional.only(start: 12, end: 6)
-              : null,
+          padding: const EdgeInsetsDirectional.only(start: 12, end: 6),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(999),
             color: theme.focusColor,
