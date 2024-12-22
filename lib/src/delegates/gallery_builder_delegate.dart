@@ -213,11 +213,11 @@ class GalleryBuilderDelegate extends DefaultAssetPickerBuilderDelegate {
         });
   }
 
-  Future<void> resetPosition() async {
+  Future<void> reset() async {
     if (isSwitchingPath.value) {
       isSwitchingPath.value = false;
     }
-    provider.currentPath = provider.paths.firstOrNull; // reset to first path
+    provider.getPaths(); // reset to first path
     await gridScrollController.animateTo(0.0,
         duration: kThemeAnimationDuration, curve: Curves.ease);
   }
