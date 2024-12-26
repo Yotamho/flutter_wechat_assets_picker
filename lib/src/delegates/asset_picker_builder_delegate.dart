@@ -1701,20 +1701,27 @@ class DefaultAssetPickerBuilderDelegate
 
   Widget withContextMenu(BuildContext context, Widget item, AssetEntity asset) {
     if (contextActions != null) {
-      return CupertinoContextMenu.builder(
-          actions: contextActions!.map((f) => f(context, asset)).toList(),
-          builder: (_, animation) {
-            final provider = AssetEntityImageProvider(asset);
-            return animation.value > CupertinoContextMenu.animationOpensAt
-                ? ClipRRect(
-                    borderRadius: BorderRadius.circular(
-                        CupertinoContextMenu.kOpenBorderRadius *
-                            animation.value),
-                    child: ExtendedImage(
-                      image: provider,
-                    ))
-                : Material(child: item);
-          });
+      final provider = AssetEntityImageProvider(asset);
+      return GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTapDown: (_) =>
+            provider.resolve(const ImageConfiguration()), // cache the image
+        child: CupertinoContextMenu.builder(
+            actions: contextActions!.map((f) => f(context, asset)).toList(),
+            builder: (_, animation) {
+              return animation.value > CupertinoContextMenu.animationOpensAt
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(
+                          CupertinoContextMenu.kOpenBorderRadius *
+                              animation.value),
+                      child: Image(
+                        // no need for extended image in this view
+                        image: provider,
+                      ),
+                    )
+                  : Material(child: item);
+            }),
+      );
     } else {
       return item;
     }
