@@ -135,6 +135,8 @@ class GalleryViewerBuilderDelegate
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => cachePrevAndNext(currentIndex));
     return Theme(
       data: themeData,
       child: AnnotatedRegion<SystemUiOverlayStyle>(
