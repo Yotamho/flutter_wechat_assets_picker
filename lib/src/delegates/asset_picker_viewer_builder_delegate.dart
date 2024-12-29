@@ -1001,8 +1001,29 @@ class DefaultAssetPickerViewerBuilderDelegate
     );
   }
 
+  void cachePrevAndNext(int index) {
+    if (index > 0) {
+      AssetEntityImageProvider(previewAssets[index - 1])
+          .resolve(const ImageConfiguration());
+    }
+    if (index + 1 < previewAssets.length) {
+      AssetEntityImageProvider(previewAssets[index + 1])
+          .resolve(const ImageConfiguration());
+    }
+  }
+
+  @override
+  void initStateAndTicker(
+      covariant AssetPickerViewerState<AssetEntity, AssetPathEntity> state,
+      TickerProvider v) {
+    pageStreamController.stream.listen(cachePrevAndNext);
+    super.initStateAndTicker(state, v);
+  }
+
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => cachePrevAndNext(currentIndex));
     return Theme(
       data: themeData,
       child: AnnotatedRegion<SystemUiOverlayStyle>(
