@@ -98,11 +98,12 @@ class _ImagePageBuilderState extends State<ImagePageBuilder> {
 
   Widget _imageBuilder(BuildContext context, AssetEntity asset) {
     return ExtendedImage(
-      image: widget.imageProvider ?? AssetEntityImageProvider(
-        asset,
-        isOriginal: _isOriginal,
-        thumbnailSize: widget.previewThumbnailSize,
-      ),
+      image: widget.imageProvider ??
+          AssetEntityImageProvider(
+            asset,
+            isOriginal: _isOriginal,
+            thumbnailSize: widget.previewThumbnailSize,
+          ),
       fit: BoxFit.contain,
       mode: ExtendedImageMode.gesture,
       onDoubleTap: widget.delegate.updateAnimation,

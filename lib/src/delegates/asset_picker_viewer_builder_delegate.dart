@@ -429,7 +429,11 @@ class DefaultAssetPickerViewerBuilderDelegate
     final AssetEntity asset = previewAssets.elementAt(
       shouldReversePreview ? previewAssets.length - index - 1 : index,
     );
-    final cachedProvider = previous != null && asset == previous!.$1 ? previous!.$2 : next != null && asset == next!.$1 ? next!.$2 : null;
+    final cachedProvider = previous != null && asset == previous!.$1
+        ? previous!.$2
+        : next != null && asset == next!.$1
+            ? next!.$2
+            : null;
     final Widget builder = switch (asset.type) {
       AssetType.audio => AudioPageBuilder(
           asset: asset,
@@ -1009,15 +1013,20 @@ class DefaultAssetPickerViewerBuilderDelegate
   void cachePrevAndNext(int index) {
     if (index > 0) {
       final previousAsset = previewAssets[index - 1];
-      previous = (previousAsset, AssetEntityImageProvider(previousAsset)
-          ..resolve(const ImageConfiguration()));
+      previous = (
+        previousAsset,
+        AssetEntityImageProvider(previousAsset)
+          ..resolve(const ImageConfiguration())
+      );
     } else {
       previous = null;
     }
     if (index + 1 < previewAssets.length) {
       final nextAsset = previewAssets[index + 1];
-      next = (nextAsset, AssetEntityImageProvider(nextAsset)
-          ..resolve(const ImageConfiguration()));
+      next = (
+        nextAsset,
+        AssetEntityImageProvider(nextAsset)..resolve(const ImageConfiguration())
+      );
     } else {
       next = null;
     }
