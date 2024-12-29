@@ -409,6 +409,9 @@ class DefaultAssetPickerViewerBuilderDelegate
   /// 如果类型不为空，则标题将不会显示。
   final SpecialPickerType? specialPickerType;
 
+  (AssetEntity, AssetEntityImageProvider)? previous;
+  (AssetEntity, AssetEntityImageProvider)? next;
+
   /// Whether the [SpecialPickerType.wechatMoment] is enabled.
   /// 当前是否为微信朋友圈选择模式
   bool get isWeChatMoment =>
@@ -426,6 +429,7 @@ class DefaultAssetPickerViewerBuilderDelegate
     final AssetEntity asset = previewAssets.elementAt(
       shouldReversePreview ? previewAssets.length - index - 1 : index,
     );
+    final cachedProvider = previous != null && asset == previous!.$1 ? previous!.$2 : next != null && asset == next!.$1 ? next!.$2 : null;
     final Widget builder = switch (asset.type) {
       AssetType.audio => AudioPageBuilder(
           asset: asset,
@@ -436,6 +440,7 @@ class DefaultAssetPickerViewerBuilderDelegate
           delegate: this,
           previewThumbnailSize: previewThumbnailSize,
           shouldAutoplayPreview: shouldAutoplayPreview,
+          imageProvider: cachedProvider,
         ),
       AssetType.video => VideoPageBuilder(
           asset: asset,
@@ -1003,12 +1008,18 @@ class DefaultAssetPickerViewerBuilderDelegate
 
   void cachePrevAndNext(int index) {
     if (index > 0) {
-      AssetEntityImageProvider(previewAssets[index - 1])
-          .resolve(const ImageConfiguration());
+      final previousAsset = previewAssets[index - 1];
+      previous = (previousAsset, AssetEntityImageProvider(previousAsset)
+          ..resolve(const ImageConfiguration()));
+    } else {
+      previous = null;
     }
     if (index + 1 < previewAssets.length) {
-      AssetEntityImageProvider(previewAssets[index + 1])
-          .resolve(const ImageConfiguration());
+      final nextAsset = previewAssets[index + 1];
+      next = (nextAsset, AssetEntityImageProvider(nextAsset)
+          ..resolve(const ImageConfiguration()));
+    } else {
+      next = null;
     }
   }
 

@@ -24,6 +24,7 @@ class ImagePageBuilder extends StatefulWidget {
     required this.delegate,
     this.previewThumbnailSize,
     this.shouldAutoplayPreview = false,
+    this.imageProvider,
   });
 
   /// Asset currently displayed.
@@ -37,6 +38,9 @@ class ImagePageBuilder extends StatefulWidget {
   /// Whether the preview should auto play.
   /// 预览是否自动播放
   final bool shouldAutoplayPreview;
+
+  // optional cached image provider
+  final AssetEntityImageProvider? imageProvider;
 
   @override
   State<ImagePageBuilder> createState() => _ImagePageBuilderState();
@@ -94,7 +98,7 @@ class _ImagePageBuilderState extends State<ImagePageBuilder> {
 
   Widget _imageBuilder(BuildContext context, AssetEntity asset) {
     return ExtendedImage(
-      image: AssetEntityImageProvider(
+      image: widget.imageProvider ?? AssetEntityImageProvider(
         asset,
         isOriginal: _isOriginal,
         thumbnailSize: widget.previewThumbnailSize,
