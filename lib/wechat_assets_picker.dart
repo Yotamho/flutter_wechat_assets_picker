@@ -10,6 +10,7 @@ export 'package:photo_manager_image_provider/photo_manager_image_provider.dart';
 
 export 'src/constants/config.dart';
 export 'src/constants/constants.dart' hide packageName;
+export 'src/constants/custom_scroll_physics.dart';
 export 'src/constants/enums.dart';
 export 'src/constants/typedefs.dart';
 
