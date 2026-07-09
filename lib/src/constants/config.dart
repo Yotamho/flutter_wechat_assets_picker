@@ -2,7 +2,8 @@
 // Use of this source code is governed by an Apache license that can be found
 // in the LICENSE file.
 
-import 'package:flutter/material.dart' show Color, ThemeData;
+import 'package:flutter/material.dart'
+    show BuildContext, Color, ThemeData, Widget;
 import 'package:photo_manager/photo_manager.dart';
 
 import '../constants/typedefs.dart';
@@ -38,6 +39,7 @@ class AssetPickerConfig {
     this.pathNameBuilder,
     this.assetsChangeCallback,
     this.assetsChangeRefreshPredicate,
+    this.contextActions,
     this.shouldAutoplayPreview = false,
     this.dragToSelect,
     this.enableLivePhoto = true,
@@ -192,6 +194,16 @@ class AssetPickerConfig {
   /// {@macro wechat_assets_picker.AssetsChangeRefreshPredicate}
   final AssetsChangeRefreshPredicate<AssetPathEntity>?
       assetsChangeRefreshPredicate;
+
+  /// {@template wechat_assets_picker.constants.AssetPickerConfig.contextActions}
+  /// Builders of context menu actions that show up
+  /// when an asset in the grid is long-pressed.
+  /// 长按网格中的资源时显示的上下文菜单操作构建器。
+  ///
+  /// When not null, grid items are wrapped with a `CupertinoContextMenu`
+  /// and long-press-to-preview is disabled.
+  /// {@endtemplate}
+  final List<Widget Function(BuildContext, AssetEntity)>? contextActions;
 
   /// Whether the preview should auto play.
   /// 预览是否自动播放

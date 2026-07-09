@@ -198,4 +198,10 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String get customPickerInstagramLayoutDescription =>
       '该选择器以 Instagram 的布局模式构建，在选择时可以同时预览。其已发布为单独的 package：insta_assets_picker。';
+
+  @override
+  String get pickMethodContextMenuName => '上下文操作选择器';
+
+  @override
+  String get pickMethodContextMenuDescription => '为选择器提供自定义操作，长按网格中的资源时显示。';
 }

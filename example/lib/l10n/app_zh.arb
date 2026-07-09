@@ -58,5 +58,7 @@
   "customPickerMultiTabTab2": "视频",
   "customPickerMultiTabTab3": "图片",
   "customPickerInstagramLayoutName": "Instagram 布局的选择器",
-  "customPickerInstagramLayoutDescription": "该选择器以 Instagram 的布局模式构建，在选择时可以同时预览。其已发布为单独的 package：insta_assets_picker。"
+  "customPickerInstagramLayoutDescription": "该选择器以 Instagram 的布局模式构建，在选择时可以同时预览。其已发布为单独的 package：insta_assets_picker。",
+  "pickMethodContextMenuName": "上下文操作选择器",
+  "pickMethodContextMenuDescription": "为选择器提供自定义操作，长按网格中的资源时显示。"
 }

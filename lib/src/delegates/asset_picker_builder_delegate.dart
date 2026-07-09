@@ -7,6 +7,7 @@ import 'dart:math' as math;
 import 'dart:typed_data' show Uint8List;
 import 'dart:ui' as ui;
 
+import 'package:flutter/cupertino.dart' show CupertinoContextMenu;
 import 'package:flutter/gestures.dart' show TapGestureRecognizer;
 import 'package:flutter/material.dart' hide Path;
 import 'package:flutter/semantics.dart' show OrdinalSortKey;
@@ -53,6 +54,7 @@ abstract class AssetPickerBuilderDelegate<Asset, Path> {
     this.viewerUseRootNavigator = false,
     this.viewerPageRouteSettings,
     this.viewerPageRouteBuilder,
+    this.contextActions,
     Color? themeColor,
     AssetPickerTextDelegate? textDelegate,
     Locale? locale,
@@ -134,6 +136,9 @@ abstract class AssetPickerBuilderDelegate<Asset, Path> {
   final bool viewerUseRootNavigator;
   final RouteSettings? viewerPageRouteSettings;
   final AssetPickerViewerPageRouteBuilder<List<Asset>>? viewerPageRouteBuilder;
+
+  /// {@macro wechat_assets_picker.constants.AssetPickerConfig.contextActions}
+  final List<Widget Function(BuildContext, Asset)>? contextActions;
 
   /// [ThemeData] for the picker.
   /// 选择器使用的主题
@@ -834,6 +839,7 @@ class DefaultAssetPickerBuilderDelegate<T extends DefaultAssetPickerProvider>
     super.viewerUseRootNavigator,
     super.viewerPageRouteSettings,
     super.viewerPageRouteBuilder,
+    super.contextActions,
     super.themeColor,
     super.textDelegate,
     super.locale,
@@ -1724,7 +1730,9 @@ class DefaultAssetPickerBuilderDelegate<T extends DefaultAssetPickerProvider>
                 selectAsset(context, asset, index, isSelected);
               },
               onTapHint: semanticsTextDelegate.sActionSelectHint,
-              onLongPress: isPreviewEnabled
+              // Long presses open the context menu when actions are provided,
+              // so the preview gesture is only enabled without them.
+              onLongPress: isPreviewEnabled && contextActions == null
                   ? () {
                       viewAsset(context, index, asset);
                     }
@@ -1740,6 +1748,7 @@ class DefaultAssetPickerBuilderDelegate<T extends DefaultAssetPickerProvider>
               child: GestureDetector(
                 // Regression https://github.com/flutter/flutter/issues/35112.
                 onLongPress: isPreviewEnabled &&
+                        contextActions == null &&
                         MediaQuery.accessibleNavigationOf(context)
                     ? () {
                         viewAsset(context, index, asset);
@@ -1895,6 +1904,33 @@ class DefaultAssetPickerBuilderDelegate<T extends DefaultAssetPickerProvider>
     );
   }
 
+  /// Wraps the grid [item] with a [CupertinoContextMenu] built from
+  /// [contextActions] when they are provided.
+  Widget withContextMenu(BuildContext context, Widget item, AssetEntity asset) {
+    if (contextActions == null) {
+      return item;
+    }
+    final provider = AssetEntityImageProvider(asset);
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      // Cache the image ahead of the menu opening.
+      onTapDown: (_) => provider.resolve(const ImageConfiguration()),
+      child: CupertinoContextMenu.builder(
+        actions: contextActions!.map((f) => f(context, asset)).toList(),
+        builder: (_, animation) {
+          return animation.value > CupertinoContextMenu.animationOpensAt
+              ? ClipRRect(
+                  borderRadius: BorderRadius.circular(
+                    CupertinoContextMenu.kOpenBorderRadius * animation.value,
+                  ),
+                  child: Image(image: provider),
+                )
+              : Material(child: item);
+        },
+      ),
+    );
+  }
+
   @override
   Widget imageAndVideoItemBuilder(
     BuildContext context,
@@ -1912,7 +1948,7 @@ class DefaultAssetPickerBuilderDelegate<T extends DefaultAssetPickerProvider>
           isOriginal: false,
           thumbnailSize: gridThumbnailSize,
         );
-        return Stack(
+        final item = Stack(
           fit: StackFit.expand,
           children: <Widget>[
             RepaintBoundary(
@@ -1937,6 +1973,7 @@ class DefaultAssetPickerBuilderDelegate<T extends DefaultAssetPickerProvider>
               buildLivePhotoIndicator(context, asset),
           ],
         );
+        return withContextMenu(context, item, asset);
       },
       progressBuilder: (context, state, progress) => Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -2424,6 +2461,7 @@ class DefaultAssetPickerBuilderDelegate<T extends DefaultAssetPickerProvider>
         MediaQuery.sizeOf(context).width / gridCount / 3;
     return Positioned.fill(
       child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
         onTap: isPreviewEnabled
             ? () {
                 viewAsset(context, index, asset);
@@ -2433,33 +2471,35 @@ class DefaultAssetPickerBuilderDelegate<T extends DefaultAssetPickerProvider>
           builder: (_, T p, __) {
             final int index = p.selectedAssets.indexOf(asset);
             final bool selected = index != -1;
-            return AnimatedContainer(
-              duration: switchingPathDuration,
-              padding: EdgeInsets.all(indicatorSize * .35),
-              color: selected
-                  ? theme.colorScheme.primary.withOpacity(.45)
-                  : theme.colorScheme.surface.withOpacity(.1),
-              child: selected && !isSingleAssetMode
-                  ? Align(
-                      alignment: AlignmentDirectional.topStart,
-                      child: SizedBox(
-                        height: indicatorSize / 2.5,
-                        child: FittedBox(
-                          alignment: AlignmentDirectional.topStart,
-                          fit: BoxFit.cover,
-                          child: Text(
-                            '${index + 1}',
-                            style: TextStyle(
-                              color: theme.textTheme.bodyLarge?.color
-                                  ?.withOpacity(.75),
-                              fontWeight: FontWeight.w600,
-                              height: 1,
+            return IgnorePointer(
+              child: AnimatedContainer(
+                duration: switchingPathDuration,
+                padding: EdgeInsets.all(indicatorSize * .35),
+                color: selected
+                    ? theme.colorScheme.primary.withOpacity(.45)
+                    : theme.colorScheme.surface.withOpacity(.1),
+                child: selected && !isSingleAssetMode
+                    ? Align(
+                        alignment: AlignmentDirectional.topStart,
+                        child: SizedBox(
+                          height: indicatorSize / 2.5,
+                          child: FittedBox(
+                            alignment: AlignmentDirectional.topStart,
+                            fit: BoxFit.cover,
+                            child: Text(
+                              '${index + 1}',
+                              style: TextStyle(
+                                color: theme.textTheme.bodyLarge?.color
+                                    ?.withOpacity(.75),
+                                fontWeight: FontWeight.w600,
+                                height: 1,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    )
-                  : const SizedBox.shrink(),
+                      )
+                    : const SizedBox.shrink(),
+              ),
             );
           },
         ),

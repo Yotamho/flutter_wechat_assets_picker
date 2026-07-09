@@ -451,6 +451,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The picker reproduces Instagram layout with preview and scroll animations. It\'s also published as the package insta_assets_picker.'**
   String get customPickerInstagramLayoutDescription;
+
+  /// No description provided for @pickMethodContextMenuName.
+  ///
+  /// In en, this message translates to:
+  /// **'Context Actions picker'**
+  String get pickMethodContextMenuName;
+
+  /// No description provided for @pickMethodContextMenuDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Picker is provided with custom actions that are shown when asset on grid is long pressed'**
+  String get pickMethodContextMenuDescription;
 }
 
 class _AppLocalizationsDelegate
