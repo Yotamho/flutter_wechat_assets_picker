@@ -69,9 +69,38 @@ class TestPhotoManagerPlugin extends PhotoManagerPlugin {
   ) {
     return SynchronousFuture<PermissionState>(PermissionState.authorized);
   }
+
+  @override
+  Future<Uint8List?> getThumbnail({
+    required String id,
+    required ThumbnailOption option,
+    PMProgressHandler? progressHandler,
+  }) {
+    return SynchronousFuture<Uint8List?>(transparentImageBytes);
+  }
+
+  @override
+  Future<bool> isLocallyAvailable(
+    String id, {
+    bool isOrigin = false,
+    int subtype = 0,
+    PMDarwinAVFileType? darwinFileType,
+  }) {
+    return SynchronousFuture<bool>(true);
+  }
+
+  @override
+  Future<bool> notifyChange({required bool start}) {
+    return SynchronousFuture<bool>(true);
+  }
 }
 
 class TestAssetPickerDelegate extends AssetPickerDelegate {
+  TestAssetPickerDelegate({this.assets});
+
+  /// Assets the picker provider gets populated with.
+  final List<AssetEntity>? assets;
+
   @override
   Future<PermissionState> permissionCheck({
     PermissionRequestOption requestOption = const PermissionRequestOption(),
@@ -112,14 +141,16 @@ class TestAssetPickerDelegate extends AssetPickerDelegate {
       sortPathDelegate: pickerConfig.sortPathDelegate,
       filterOptions: pickerConfig.filterOptions,
     );
+    final List<AssetEntity> currentAssets =
+        assets ?? <AssetEntity>[testAssetEntity];
     provider
-      ..currentAssets = <AssetEntity>[testAssetEntity]
+      ..currentAssets = currentAssets
       ..currentPath = PathWrapper<AssetPathEntity>(
         path: pathEntity,
-        assetCount: 1,
+        assetCount: currentAssets.length,
       )
       ..hasAssetsToDisplay = true
-      ..totalAssetsCount = 1;
+      ..totalAssetsCount = currentAssets.length;
     final picker = AssetPicker<AssetEntity, AssetPathEntity,
         DefaultAssetPickerBuilderDelegate>(
       key: key,
@@ -143,6 +174,8 @@ class TestAssetPickerDelegate extends AssetPickerDelegate {
         themeColor: pickerConfig.themeColor,
         locale: Localizations.maybeLocaleOf(context),
         shouldAutoplayPreview: pickerConfig.shouldAutoplayPreview,
+        contextActions: pickerConfig.contextActions,
+        dragToSelect: pickerConfig.dragToSelect,
       ),
     );
     final List<AssetEntity>? result = await Navigator.of(
@@ -165,3 +198,23 @@ final AssetEntity testAssetEntity = AssetEntity(
   width: 0,
   height: 0,
 );
+
+const AssetEntity testImageAssetEntity = AssetEntity(
+  id: 'test-image',
+  typeInt: 1, // AssetType.image
+  width: 1,
+  height: 1,
+);
+
+/// A 1x1 transparent PNG, served as every thumbnail in tests.
+final Uint8List transparentImageBytes = Uint8List.fromList(const <int>[
+  0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, //
+  0x00, 0x00, 0x00, 0x0D, 0x49, 0x48, 0x44, 0x52, //
+  0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, //
+  0x08, 0x06, 0x00, 0x00, 0x00, 0x1F, 0x15, 0xC4, //
+  0x89, 0x00, 0x00, 0x00, 0x0D, 0x49, 0x44, 0x41, //
+  0x54, 0x78, 0x9C, 0x63, 0x00, 0x01, 0x00, 0x00, //
+  0x05, 0x00, 0x01, 0x0D, 0x0A, 0x2D, 0xB4, 0x00, //
+  0x00, 0x00, 0x00, 0x49, 0x45, 0x4E, 0x44, 0xAE, //
+  0x42, 0x60, 0x82, //
+]);

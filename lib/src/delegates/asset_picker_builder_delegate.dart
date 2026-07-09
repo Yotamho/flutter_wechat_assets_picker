@@ -1532,27 +1532,37 @@ class DefaultAssetPickerBuilderDelegate<T extends DefaultAssetPickerProvider>
                             globalPosition: d.globalPosition,
                           );
                         },
-                        onLongPressStart: (d) {
-                          dragSelectCoordinator.onSelectionStart(
-                            context: context,
-                            globalPosition: d.globalPosition,
-                            constraints: constraints,
-                          );
-                        },
-                        onLongPressMoveUpdate: (d) {
-                          dragSelectCoordinator.onSelectionUpdate(
-                            context: context,
-                            globalPosition: d.globalPosition,
-                            constraints: constraints,
-                          );
-                        },
-                        onLongPressCancel:
-                            dragSelectCoordinator.resetDraggingStatus,
-                        onLongPressEnd: (d) {
-                          dragSelectCoordinator.onDragEnd(
-                            globalPosition: d.globalPosition,
-                          );
-                        },
+                        // Long presses are reserved for the context menu
+                        // when actions are provided; registering a competing
+                        // recognizer here would win the arena and cancel it.
+                        onLongPressStart: contextActions == null
+                            ? (d) {
+                                dragSelectCoordinator.onSelectionStart(
+                                  context: context,
+                                  globalPosition: d.globalPosition,
+                                  constraints: constraints,
+                                );
+                              }
+                            : null,
+                        onLongPressMoveUpdate: contextActions == null
+                            ? (d) {
+                                dragSelectCoordinator.onSelectionUpdate(
+                                  context: context,
+                                  globalPosition: d.globalPosition,
+                                  constraints: constraints,
+                                );
+                              }
+                            : null,
+                        onLongPressCancel: contextActions == null
+                            ? dragSelectCoordinator.resetDraggingStatus
+                            : null,
+                        onLongPressEnd: contextActions == null
+                            ? (d) {
+                                dragSelectCoordinator.onDragEnd(
+                                  globalPosition: d.globalPosition,
+                                );
+                              }
+                            : null,
                         onPanStart: (d) {
                           dragSelectCoordinator.onSelectionStart(
                             context: context,
