@@ -117,8 +117,10 @@ class AssetPickerViewer<
     );
     final pageRoute = pageRouteBuilder?.call(viewer) ??
         AssetPickerViewerPageRoute(builder: (context) => viewer);
-    final result =
-        await Navigator.maybeOf(context)?.push<List<Asset>>(pageRoute);
+    final result = await Navigator.maybeOf(
+      context,
+      rootNavigator: useRootNavigator,
+    )?.push<List<Asset>>(pageRoute);
     return result;
   }
 }
