@@ -26,6 +26,7 @@ class ImagePageBuilder extends StatefulWidget {
     this.previewThumbnailSize,
     this.shouldAutoplayPreview = false,
     this.enableLivePhoto = true,
+    this.imageProvider,
   });
 
   /// Asset currently displayed.
@@ -43,6 +44,10 @@ class ImagePageBuilder extends StatefulWidget {
 
   /// {@macro wechat_assets_picker.constants.AssetPickerConfig.enableLivePhoto}
   final bool enableLivePhoto;
+
+  /// An optional image provider that has been pre-resolved (cached),
+  /// typically by the viewer delegate when pre-caching adjacent assets.
+  final AssetEntityImageProvider? imageProvider;
 
   @override
   State<ImagePageBuilder> createState() => _ImagePageBuilderState();
@@ -103,11 +108,12 @@ class _ImagePageBuilderState extends State<ImagePageBuilder> {
 
   Widget _imageBuilder(BuildContext context, AssetEntity asset) {
     return ExtendedImage(
-      image: AssetEntityImageProvider(
-        asset,
-        isOriginal: _isOriginal,
-        thumbnailSize: widget.previewThumbnailSize,
-      ),
+      image: widget.imageProvider ??
+          AssetEntityImageProvider(
+            asset,
+            isOriginal: _isOriginal,
+            thumbnailSize: widget.previewThumbnailSize,
+          ),
       fit: BoxFit.contain,
       mode: ExtendedImageMode.gesture,
       onDoubleTap: widget.delegate.updateAnimation,
