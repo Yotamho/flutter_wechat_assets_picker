@@ -720,19 +720,21 @@ abstract class AssetPickerBuilderDelegate<Asset, Path> {
   Widget permissionOverlay(BuildContext context) {
     final Size size = MediaQuery.sizeOf(context);
     final EdgeInsets padding = MediaQuery.paddingOf(context);
-    final Widget closeButton = Container(
-      margin: const EdgeInsetsDirectional.only(start: 16, top: 4),
-      alignment: AlignmentDirectional.centerStart,
-      child: IconButton(
-        onPressed: () {
-          Navigator.maybeOf(context)?.maybePop();
-        },
-        icon: const Icon(Icons.close),
-        padding: EdgeInsets.zero,
-        constraints: BoxConstraints.tight(const Size.square(32)),
-        tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
-      ),
-    );
+    final Widget closeButton = Navigator.canPop(context)
+        ? Container(
+            margin: const EdgeInsetsDirectional.only(start: 16, top: 4),
+            alignment: AlignmentDirectional.centerStart,
+            child: IconButton(
+              onPressed: () {
+                Navigator.maybeOf(context)?.maybePop();
+              },
+              icon: const Icon(Icons.close),
+              padding: EdgeInsets.zero,
+              constraints: BoxConstraints.tight(const Size.square(32)),
+              tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
+            ),
+          )
+        : const SizedBox.shrink();
 
     final Widget limitedTips = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30),
