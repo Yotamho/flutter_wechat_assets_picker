@@ -107,7 +107,8 @@ void main() {
 
   group('Context actions', () {
     testWidgets(
-      'long press opens the context menu while drag-to-select is enabled',
+      'long press opens the context menu even when drag-to-select '
+      'would otherwise be enabled',
       (WidgetTester tester) async {
         AssetPicker.setPickerDelegate(
           TestAssetPickerDelegate(assets: <AssetEntity>[testImageAssetEntity]),
@@ -145,8 +146,8 @@ void main() {
               Offset(itemRect.width * 0.25, itemRect.height * 0.75),
         );
         // The menu opens once the decoy animation completes (~800ms), unless
-        // another recognizer (e.g. drag-to-select's long press) claims the
-        // gesture arena first.
+        // another recognizer (e.g. drag-to-select's long press, which
+        // contextActions must disable) claims the gesture arena first.
         await tester.pump(const Duration(milliseconds: 100));
         await tester.pump(const Duration(seconds: 1));
         await gesture.up();

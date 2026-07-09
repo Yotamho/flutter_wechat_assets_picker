@@ -200,8 +200,9 @@ class AssetPickerConfig {
   /// when an asset in the grid is long-pressed.
   /// 长按网格中的资源时显示的上下文菜单操作构建器。
   ///
-  /// When not null, grid items are wrapped with a `CupertinoContextMenu`
-  /// and long-press-to-preview is disabled.
+  /// When not null, grid items are wrapped with a `CupertinoContextMenu`,
+  /// and long-press-to-preview together with [dragToSelect] are disabled
+  /// so long presses can open the menu.
   /// {@endtemplate}
   final List<Widget Function(BuildContext, AssetEntity)>? contextActions;
 
