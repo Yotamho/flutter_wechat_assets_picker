@@ -251,7 +251,9 @@ abstract class AssetPickerViewerBuilderDelegate<Asset, Path,
 
   /// 是否已经选择了最大数量的资源
   bool get selectedMaximumAssets =>
-      selectedAssets != null && selectedAssets!.length == maxAssets;
+      selectedAssets != null &&
+      maxAssets != null &&
+      selectedAssets!.length >= maxAssets!;
 
   /// Construct a notifier to notify
   /// whether if a new asset is selected or unselected.
@@ -268,11 +270,11 @@ abstract class AssetPickerViewerBuilderDelegate<Asset, Path,
   }
 
   void selectAsset(Asset asset) {
-    if (maxAssets != null && selectedCount > maxAssets!) {
+    if (selectedMaximumAssets && !(selectedAssets?.contains(asset) ?? false)) {
       return;
     }
     provider?.selectAsset(asset);
-    if (!isSelectedPreviewing) {
+    if (!isSelectedPreviewing && !(selectedAssets?.contains(asset) ?? false)) {
       selectedAssets?.add(asset);
     }
     selectedNotifier.value = selectedCount;
@@ -957,6 +959,9 @@ class DefaultAssetPickerViewerBuilderDelegate<
           selector: (_, p) => p.currentlySelectedAssets,
           builder: (context, assets, _) {
             final bool isSelected = assets.contains(asset);
+            if (!isSelected && selectedMaximumAssets) {
+              return const SizedBox.shrink();
+            }
             return Semantics(
               selected: isSelected,
               label: semanticsTextDelegate.select,
