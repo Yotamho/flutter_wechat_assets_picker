@@ -4,6 +4,7 @@
 
 import 'dart:async' show StreamController;
 import 'dart:math' as math show max;
+import 'dart:ui' as ui show ImageFilter;
 
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart' hide Path;
@@ -143,7 +144,12 @@ abstract class AssetPickerViewerBuilderDelegate<Asset, Path,
   /// 底栏部件的高度
   double get bottomBarHeight => 50.0;
 
-  double get bottomDetailHeight => bottomPreviewHeight + bottomBarHeight;
+  /// Margin around the floating bottom actions bar.
+  /// 底部悬浮操作栏的外边距
+  double get bottomBarMargin => 12.0;
+
+  double get bottomDetailHeight =>
+      bottomPreviewHeight + bottomBarHeight + bottomBarMargin * 2;
 
   /// Whether the current platform is Apple OS.
   /// 当前平台是否为苹果系列系统
@@ -610,21 +616,39 @@ class DefaultAssetPickerViewerBuilderDelegate<
                 ),
               ),
             ),
-          Container(
-            height: bottomBarHeight + context.bottomPadding,
-            padding: const EdgeInsets.symmetric(horizontal: 20.0)
-                .copyWith(bottom: context.bottomPadding),
-            decoration: BoxDecoration(
-              border: Border(top: BorderSide(color: themeData.canvasColor)),
-              color: backgroundColor,
+          if (provider != null || isWeChatMoment)
+            Padding(
+              padding: EdgeInsetsDirectional.only(
+                top: bottomBarMargin,
+                bottom: bottomBarMargin + context.bottomPadding,
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(bottomBarHeight / 2),
+                child: BackdropFilter(
+                  filter: ui.ImageFilter.blur(sigmaX: 24, sigmaY: 24),
+                  child: Container(
+                    height: bottomBarHeight,
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    decoration: BoxDecoration(
+                      color: themeData.bottomAppBarTheme.color?.withOpacity(
+                        themeData.bottomAppBarTheme.color!.opacity * .55,
+                      ),
+                      borderRadius: BorderRadius.circular(bottomBarHeight / 2),
+                      border: Border.all(
+                        color: Colors.white.withOpacity(
+                          themeData.brightness == Brightness.dark ? .2 : .6,
+                        ),
+                        width: .75,
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[confirmButton(context)],
+                    ),
+                  ),
+                ),
+              ),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                if (provider != null || isWeChatMoment) confirmButton(context),
-              ],
-            ),
-          ),
         ],
       ),
     );
