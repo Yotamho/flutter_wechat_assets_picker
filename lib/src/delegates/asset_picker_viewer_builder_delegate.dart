@@ -301,6 +301,14 @@ abstract class AssetPickerViewerBuilderDelegate<Asset, Path,
     return true;
   }
 
+  /// Whether previewed images should participate in the slide-out gesture of
+  /// an ancestor [ExtendedImageSlidePage].
+  /// 预览的图片是否参与上层 [ExtendedImageSlidePage] 的滑动退出手势
+  ///
+  /// Delegates that wrap their page with an [ExtendedImageSlidePage] should
+  /// override this to `true`, otherwise the images won't respond to the drag.
+  bool get enableSlideOutPage => false;
+
   /// Method to switch [isDisplayingDetail].
   /// 切换显示详情状态的方法
   void switchDisplayingDetail({bool? value}) {
@@ -485,6 +493,7 @@ class DefaultAssetPickerViewerBuilderDelegate<
           previewThumbnailSize: previewThumbnailSize,
           shouldAutoplayPreview: shouldAutoplayPreview,
           enableLivePhoto: enableLivePhoto,
+          enableSlideOutPage: enableSlideOutPage,
           imageProvider: cachedProvider,
         ),
       AssetType.video => VideoPageBuilder(

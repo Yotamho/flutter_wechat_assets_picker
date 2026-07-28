@@ -26,6 +26,7 @@ class ImagePageBuilder extends StatefulWidget {
     this.previewThumbnailSize,
     this.shouldAutoplayPreview = false,
     this.enableLivePhoto = true,
+    this.enableSlideOutPage = false,
     this.imageProvider,
   });
 
@@ -44,6 +45,11 @@ class ImagePageBuilder extends StatefulWidget {
 
   /// {@macro wechat_assets_picker.constants.AssetPickerConfig.enableLivePhoto}
   final bool enableLivePhoto;
+
+  /// Whether the image should slide along with an ancestor
+  /// [ExtendedImageSlidePage], so the page can be dragged away to dismiss.
+  /// 图片是否跟随上层的 [ExtendedImageSlidePage] 滑动，以便拖拽退出预览
+  final bool enableSlideOutPage;
 
   /// An optional image provider that has been pre-resolved (cached),
   /// typically by the viewer delegate when pre-caching adjacent assets.
@@ -133,6 +139,7 @@ class _ImagePageBuilderState extends State<ImagePageBuilder> {
           ),
       fit: BoxFit.contain,
       mode: ExtendedImageMode.gesture,
+      enableSlideOutPage: widget.enableSlideOutPage,
       onDoubleTap: widget.delegate.updateAnimation,
       initGestureConfigHandler: (ExtendedImageState state) => GestureConfig(
         minScale: 1.0,
